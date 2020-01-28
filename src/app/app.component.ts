@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Question } from '../entities/question';
 
 @Component({
@@ -11,11 +11,13 @@ export class AppComponent {
 
   question: Question;
   questions: Question[];
-
   currentAnswer: number;
+  currentAnswerStr: string;
+
   score: number;
   constructor() {
     var score = parseInt(localStorage.getItem("score"));
+    this.currentAnswerStr = "";
     if (score) {
       this.score = score;
     }
@@ -25,6 +27,19 @@ export class AppComponent {
 
     this.newQuestion();
     this.questions = [];
+  }
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    var key = event.key;
+    var number = parseInt(key);
+    if (!isNaN(number)) {
+      this.currentAnswerStr = this.currentAnswerStr + key;
+    }
+    if (key == "Enter") {
+      this.currentAnswer = parseInt(this.currentAnswerStr);
+      this.next();
+    }
+    
   }
   next() {
     this.question.userAnswer = this.currentAnswer;
@@ -37,6 +52,7 @@ export class AppComponent {
     this.questions.push(this.question);
     this.newQuestion();
     this.currentAnswer = undefined;
+    this.currentAnswerStr = "";
   }
   private newQuestion() {
 
@@ -49,12 +65,5 @@ export class AppComponent {
   getRandom(from, to) {
     return Math.floor(Math.random() * to) + from
   }
-  onKey(event: any) {
-    console.log(event.target.value);
-
-    if (event.keyCode === 13) {
-      this.currentAnswer = event.target.value;
-      this.next();
-    }
-  }
+ 
 }
