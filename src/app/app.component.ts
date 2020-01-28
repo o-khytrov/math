@@ -43,9 +43,10 @@ export class AppComponent {
     this.questions = [];
     this.Levels = Levels;
   }
-  @HostListener('document:keypress', ['$event'])
+  @HostListener('document:keyup', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     var key = event.key;
+
     var number = parseInt(key);
     if (!isNaN(number)) {
       this.currentAnswerStr = this.currentAnswerStr + key;
@@ -53,6 +54,10 @@ export class AppComponent {
     if (key == "Enter") {
       this.currentAnswer = parseInt(this.currentAnswerStr);
       this.next();
+    }
+    if (key == "Backspace") {
+      this.currentAnswerStr = this.currentAnswerStr.substr(0, this.currentAnswerStr.length - 1);
+      this.currentAnswer = parseInt(this.currentAnswerStr);
     }
 
   }
