@@ -1,0 +1,10 @@
+
+.map {
+  height: 280px;
+}
+.levels {
+  border-collapse: collapse;
+}
+.level {
+  border-radius: 5px;
+}
